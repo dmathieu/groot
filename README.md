@@ -2,7 +2,7 @@
 
 Regularly fetches twitter stats and sends them to librato.
 
-### Installing
+## Installing
 
 Groot is meant to run on heroku. Installing it is pretty easy.
 
