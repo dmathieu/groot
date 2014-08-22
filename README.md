@@ -1,4 +1,4 @@
-# Groot
+# Groot [![Build Status](https://travis-ci.org/dmathieu/groot.svg)](https://travis-ci.org/dmathieu/groot)
 
 Regularly fetches twitter stats and sends them to librato.
 
