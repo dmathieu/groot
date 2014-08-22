@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/ChimeraCoder/anaconda"
 	"net/url"
 	"os"
@@ -32,11 +33,14 @@ func BuildTwitter() *Twitter {
 	return client
 }
 
-func (t *Twitter) fetchUser(account string) {
+func (t *Twitter) fetchUser(account string, collector *Metrics) {
 	user, err := t.Client.GetUsersShow(account, url.Values{})
 	if err != nil {
 		Log("Couldn't fetch twitter data")
 	} else {
 		Log("account.data name=%s followers=%d following=%d", user.Name, user.FollowersCount, user.FriendsCount)
+
+		go collector.TrackGauge(fmt.Sprintf("twitter.%s.followers", account), int64(user.FollowersCount))
+		go collector.TrackGauge(fmt.Sprintf("twitter.%s.following", account), int64(user.FriendsCount))
 	}
 }
