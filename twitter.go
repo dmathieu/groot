@@ -5,7 +5,7 @@ import (
 	"github.com/ChimeraCoder/anaconda"
 	"net/url"
 	"os"
-  "time"
+	"time"
 )
 
 type TwitterAccount struct {
@@ -41,26 +41,26 @@ func (t *Twitter) fetchUser(account string, collector *Metrics) {
 	} else {
 		Log("account.data name=%s followers=%d following=%d", account, user.FollowersCount, user.FriendsCount)
 
-    go collector.TrackGauge(fmt.Sprintf("twitter.%s.followers", account), int64(user.FollowersCount))
-    go collector.TrackGauge(fmt.Sprintf("twitter.%s.following", account), int64(user.FriendsCount))
+		go collector.TrackGauge(fmt.Sprintf("twitter.%s.followers", account), int64(user.FollowersCount))
+		go collector.TrackGauge(fmt.Sprintf("twitter.%s.following", account), int64(user.FriendsCount))
 	}
 
-  searchParams, _ := url.ParseQuery("count=100")
-  search, err := t.Client.GetSearch(fmt.Sprintf("@%s", account), searchParams)
-  if err != nil {
-    Log("Couldn't fetch twitter search data")
-  } else {
-    yesterday := time.Now().Add(-(24 * time.Hour))
-    searchCount := 0
+	searchParams, _ := url.ParseQuery("count=100")
+	search, err := t.Client.GetSearch(fmt.Sprintf("@%s", account), searchParams)
+	if err != nil {
+		Log("Couldn't fetch twitter search data")
+	} else {
+		yesterday := time.Now().Add(-(24 * time.Hour))
+		searchCount := 0
 
-    for _, result := range search {
-      createdAt, _ := result.CreatedAtTime()
-      if createdAt.After(yesterday) {
-        searchCount += 1
-      }
-    }
+		for _, result := range search {
+			createdAt, _ := result.CreatedAtTime()
+			if createdAt.After(yesterday) {
+				searchCount += 1
+			}
+		}
 
-    Log("account.search name=%s results=%d total=%d", account, searchCount, len(search))
-    go collector.TrackGauge(fmt.Sprintf("twitter.%s.mentions", account), int64(searchCount))
-  }
+		Log("account.search name=%s results=%d total=%d", account, searchCount, len(search))
+		go collector.TrackGauge(fmt.Sprintf("twitter.%s.mentions", account), int64(searchCount))
+	}
 }

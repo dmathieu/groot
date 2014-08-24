@@ -10,7 +10,7 @@ func main() {
 	Log("main.start")
 
 	accounts := strings.Split(os.Getenv("TWITTER_ACCOUNTS"), ",")
-  startReporter()
+	startReporter()
 	go monitorStart(accounts, FetchInterval)
 
 	<-make(chan bool)
