@@ -50,7 +50,7 @@ func (t *Twitter) fetchUser(account string, collector *Metrics) {
 	if err != nil {
 		Log("Couldn't fetch twitter search data")
 	} else {
-		yesterday := time.Now().Add(-(24 * time.Hour))
+		yesterday := time.Now().Add(-MentionsKeep)
 		searchCount := 0
 
 		for _, result := range search {
